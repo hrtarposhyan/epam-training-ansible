@@ -8,6 +8,7 @@
           name:
             - 'php-fpm'
             - 'php-mysql'
+            - 'mysql-server'
             - 'nginx'
           state: 'present'
           update_cache: true
@@ -44,4 +45,14 @@
         copy:
           src: 'wp-config.php'
           dest: '/var/www/html/wordpress/wp-config.php'
+        become: true
+      - name: 'Upload nginx config'
+        copy:
+          src: 'nginx.conf'
+          dest: '/etc/nginx/sites-available/default'
+        become: true
+      - name: 'Restart nginx service'
+        service: 
+          name: 'nginx'
+          state: 'restarted'
         become: true

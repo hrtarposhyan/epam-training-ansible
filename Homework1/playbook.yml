@@ -40,3 +40,8 @@
           login_user: 'root'
           login_password: 'free77'
         become: true
+      - name: 'Upload wp-config.php file'
+        copy:
+          src: 'wp-config.php'
+          dest: '/var/www/html/wordpress/wp-config.php'
+        become: true

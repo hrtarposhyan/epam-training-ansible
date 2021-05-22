@@ -1,0 +1,42 @@
+---
+
+  - hosts: 'webservers'
+    remote_user: 'ubuntu'
+    tasks:
+      - name: 'Install the required packages'
+        apt:
+          name:
+            - 'php-fpm'
+            - 'php-mysql'
+            - 'nginx'
+          state: 'present'
+          update_cache: true
+        become: true
+      - name: 'Install python requirements for mysql modules'
+        pip:
+          name: 'PyMySQL'
+          state: 'present'
+        become: true
+      - name: 'Download and extract Wordpress files'
+        unarchive:
+          src: 'https://wordpress.org/latest.tar.gz'
+          dest: '/var/www/html/'
+          remote_src: true
+        become: 
+      - name: 'Create wordpress DB'
+        mysql_db:
+          name: 'wordpress_db'
+          state: 'present'
+          login_user: 'root'
+          login_password: 'free77'
+        become: true
+      - name: 'Create wordpress DB user'
+        mysql_user:
+          login_unix_socket: /var/run/mysqld/mysqld.sock
+          name: wordpress_user
+          password: 'free77'
+          state: present
+          priv: 'wordpress_db.*:ALL,GRANT'
+          login_user: 'root'
+          login_password: 'free77'
+        become: true

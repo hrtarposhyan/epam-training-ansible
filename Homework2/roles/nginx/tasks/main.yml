@@ -1,2 +1,19 @@
 ---
 # tasks file for nginx
+- name: 'Install nginx'
+  apt:
+    name: 'nginx'
+    state: 'present'
+    update_cache: true
+  become: true
+- name: 'Start nginx'
+  become: true
+  service:
+    name: nginx
+    state: started
+- name: 'Upload nginx config'
+  template:
+    src: 'nginx.conf'
+    dest: '/etc/nginx/sites-available/default'
+  become: true
+  notify: restart nginx

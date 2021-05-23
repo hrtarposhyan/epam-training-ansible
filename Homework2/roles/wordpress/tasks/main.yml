@@ -1,5 +1,13 @@
 ---
 # tasks file for wordpress
+- name: 'Install required php packages'
+  apt:
+    name:
+      - 'php-fpm'
+      - 'php-mysql'
+    state: 'present'
+    update_cache: true
+  become: true
 - name: 'Download WordPress'
   get_url:
     url: https://wordpress.org/latest.tar.gz

@@ -1,0 +1,5 @@
+---
+# vars file for wordpress
+wp_db_name: wordpress_db
+wp_db_user_name: wordpress_user
+wp_db_user_password: free77

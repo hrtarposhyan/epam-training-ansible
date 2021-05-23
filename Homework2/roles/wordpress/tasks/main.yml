@@ -1,0 +1,20 @@
+---
+# tasks file for wordpress
+- name: 'Download WordPress'
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /var/www/latest.tar.gz
+  become: true
+- name: 'Extract WordPress'
+  unarchive:
+    src: /var/www/latest.tar.gz
+    dest: /var/www
+    owner: www-data
+    group: www-data
+    remote_src: true
+  become: true
+- name: 'Deploy wordpress config file'
+  template:
+    src: 'wp-config.php'
+    dest: '/var/www/wordpress/wp-config.php'
+  become: true

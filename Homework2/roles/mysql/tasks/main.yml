@@ -1,0 +1,43 @@
+---
+# tasks file for mysql
+- name: 'InstalԼ mysql'
+  apt:
+    name:
+      - 'php-mysql'
+      - 'php-fpm'
+      - 'mysql-server'
+    state: 'present'
+    update_cache: true
+  become: true
+- name: 'Install python requirements for mysql modules'
+  pip:
+    name: 'PyMySQL'
+    state: 'present'
+  become: true
+- name: 'Start mysql'
+  service:
+    name: 'mysql'
+    enabled: true
+    state: 'started'
+  become: true
+ 
+
+- name: 'Create wordpress DB'
+  mysql_db:
+    login_unix_socket: '/var/run/mysqld/mysqld.sock'
+    name: '{{ wp_db_name }}'
+    login_user: '{{ mysql_root_user }}'
+    login_password: '{{ mysql_root_password }}'
+    state: 'present'
+  become: true
+
+- name: 'Create wordpress DB user'
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: 'present'
+    name: '{{ wp_db_user }}'
+    password: '{{ wp_db_password }}'
+    priv: 'wordpress_db.*:ALL'
+    login_user: '{{ mysql_root_user }}'
+    login_password: '{{ mysql_root_password }}'
+  become: true
